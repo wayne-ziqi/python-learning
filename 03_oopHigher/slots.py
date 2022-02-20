@@ -50,3 +50,4 @@ GraduateStudent.set_score = set_score #相当于存储了函数指针，不止�
 
 g.set_score(88)
 print("g's score is {0}".format(g._score))
+
