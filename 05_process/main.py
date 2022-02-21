@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# @Time     : 22/2/21 21:17
+# @Author   : Wayne Qi
+# @FileName : process.py
+# @Software : PyCharm
+# @Email    : wayne-ziqi@gmail.com
+
 import process as myproc
 from multiprocessing import Process
 import os
