@@ -6,11 +6,7 @@
 # @Software : PyCharm
 # @Email    : wayne-ziqi@gmail.com
 import logging
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg    #类似matlab对图片的操作
-import numpy as np
-import scipy as misc
-#import cv2 as cv
+
 
 
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"  # typo不用管,否则无法写入到文件，参数不对
@@ -47,21 +43,3 @@ with open("日志处理.md", 'r', encoding='gbk', errors='ignore') as f:
         #
         line = f.readline()
 
-#读取图片
-imgTest = mpimg.imread("日志处理.assets/1063221-20170511145312144-488305597.png")
-print(imgTest.shape)
-
-plt.imshow(imgTest)
-plt.axis('off')
-plt.show()
-
-# 转换成灰度图
-def rgb2gray(rgb):
-    return np.dot(rgb[...,:3], [0.299, 0.587, 0.114])
-
-imgGray = rgb2gray()
-
-# 也可以用 plt.imshow(imgGray, cmap = plt.get_cmap('gray'))
-plt.imshow(imgGray, cmap='Greys_r')
-plt.axis('off')
-plt.show()
