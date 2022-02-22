@@ -19,6 +19,7 @@ global mainClock
 global Hero
 global Enemies
 
+
 def gameInit():
     pygame.init()  # 导入并初始化pygame的包
     global mainScene
@@ -26,7 +27,7 @@ def gameInit():
     mainScene.windowUpdate()
     # set the plane's moving window and position
     global Hero
-    Hero = Plane.PlaneHero(1, [mainScene.width() / 2, mainScene.height() - 100], mainScene)
+    Hero = Plane.PlaneHero(5, [mainScene.width() / 2, mainScene.height() - 100], mainScene)
 
     global Enemies
     Enemies = Plane.EnemyList()
@@ -42,7 +43,8 @@ def eventProc():
         if event.type == pygame.QUIT:
             gameQuit()
             exit()
-
+        elif event.type == pygame.MOUSEMOTION:
+            Hero.fly(event.pos)
 
 
 def gameQuit():

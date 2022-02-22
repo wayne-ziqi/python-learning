@@ -28,20 +28,23 @@ class Plane(object):
         self._window.window().blit(self._imgPlane, [self._pos[0] - self._imgPlane.get_width() / 2,
                                                     self._pos[1] - self._imgPlane.get_height() / 2])
 
+    def speed(self):
+        return self._speed
+
     def position(self):
         return self._pos
 
     def height(self):
         return self._imgPlane.get_height()
 
-    def wight(self):
+    def width(self):
         return self._imgPlane.get_width()
 
     def move(self, direction, speed, passable):
         if (self._pos[0] + direction[0] * speed >= 0 + self.height() / 2
                 and self._pos[0] + direction[0] * speed - self.height() / 2 <= self._window.width()):
             self._pos[0] += direction[0]
-        if (passable or self._pos[1] + direction[1] * speed >= 0 + self.wight() / 2
+        if (passable or self._pos[1] + direction[1] * speed >= 0 + self.width() / 2
                 and self._pos[1] + direction[1] * speed - self.height() / 2 <= self._window.height()):
             self._pos[1] += direction[1]
 
@@ -53,21 +56,43 @@ class Plane(object):
 
 
 class PlaneHero(Plane):
-    def __init__(self, speed, pos,  window):
+    def __init__(self, speed, pos, window):
         super(PlaneHero, self).__init__('Hero', speed, pos, 1, window, 'images/me1.png')
+        self._head = [self.position()[0], self.position()[1] - self.height() / 2]
 
+    def head(self):
+        return self._head
+
+    def catch(self, pos):
+        return pos[0] <= self._pos[0] + self.width() / 2 \
+                and pos[0] >= self._pos[0] - self.width() / 2 \
+                and pos[1] <= self._pos[1] + self.height() / 2 \
+                and pos[1] >= self._pos[1] - self.height() / 2
+
+    def fly(self, pos):
+        #if(self.catch(pos)):
+        self.move([pos[0] - self.position()[0], pos[1] - self.position()[1]], self.speed(), False)
+        #TODO: fire bullet
 
 class PlaneEnemy1(Plane):
     def __init__(self, speed, pos, window):
         super(PlaneEnemy1, self).__init__('Enemy1', speed, pos, 5, window, 'images/enemy1.png')
+        self._head = [self.position()[0], self.position()[1] + self.height() / 2]
+
+    def head(self):
+        return self._head
 
     def exec(self):
         self.move([0, 2], self._speed, True)
 
 
 class PlaneEnemy2(Plane):
-    def __init__(self, speed, pos,  window):
+    def __init__(self, speed, pos, window):
         super(PlaneEnemy2, self).__init__('Enemy2', speed, pos, 10, window, 'images/enemy2.png')
+        self._head = [self.position()[0], self.position()[1] + self.height() / 2]
+
+    def head(self):
+        return self._head
 
     def exec(self):
         self.move([0, 1.5], self._speed, True)
@@ -76,6 +101,7 @@ class PlaneEnemy2(Plane):
 class PlaneEnemy3(Plane):
     def __init__(self, speed, pos, window):
         super(PlaneEnemy3, self).__init__('Enemy3', speed, pos, 20, window, 'images/enemy3_n1.png')
+        self._head = [self.position()[0], self.position()[1] + self.height() / 2]
 
     def exec(self):
         self.move([0, 1], self._speed, True)
