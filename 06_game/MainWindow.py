@@ -11,10 +11,12 @@ import pygame
 class MainWindow(object):
     def __init__(self, width = 0, height = 0):
         self._window = pygame.display.set_mode((width, height))
+        self._bkImg = pygame.image.load("images/background.png")
+        self.windowUpdate()
 
-        bkImg = pygame.image.load("images/background.png")
-        self._window.blit(bkImg,(0,0))
-        pygame.display.update()
+    def windowUpdate(self):
+        self._window.blit(self._bkImg,(0,0))
+        #pygame.display.update()
 
     def width(self):
         return self._window.get_width()

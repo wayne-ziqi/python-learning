@@ -25,8 +25,8 @@ def gameInit():
 
     #set the plane's moving window and position
     global Hero
-    Hero = Plane.PlaneHero((mainScene.width()/2, mainScene.height() - 100), mainScene.window())
-
+    Hero = Plane.PlaneHero([mainScene.width()/2, mainScene.height() - 100], mainScene)
+    mainScene.windowUpdate()
     global mainClock
     mainClock = pygame.time.Clock()
 
@@ -38,19 +38,27 @@ if __name__ == '__main__':
     # game initializing
     gameInit()
     time.sleep(3)
+    global mainScene
+    global mainClock
+    global Hero
     #game main loop
     while True:
         # set game frame rate: 60s is appropriate
-        global mainClock
-        mainClock.tick(1)
 
-        #需要设置事件监听
+        mainClock.tick(60)
+        # check user's interaction
+
+        Hero.move([-1,-1])
+        # update images
+        Hero.update()
+        # update screen
+        mainScene.windowUpdate()
+
+        #listen to the end event
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameQuit()
                 exit()
 
-        # check user's interaction
-        #update images
-        #update screen
+
 
