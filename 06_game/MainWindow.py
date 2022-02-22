@@ -6,6 +6,7 @@
 # @Software : PyCharm
 # @Email    : wayne-ziqi@gmail.com
 
+"class main window, user's playground"
 import pygame
 
 class MainWindow(object):
