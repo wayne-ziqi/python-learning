@@ -13,6 +13,7 @@ import time
 from MainWindow import MainWindow
 import Plane
 import Bullet
+import BasicObj
 
 global mainScene
 global mainClock
@@ -39,6 +40,13 @@ def gameInit():
     global mainClock
     mainClock = pygame.time.Clock()
 
+
+
+def gameEnd():
+    global Hero
+    global Enemies
+    t1 = Plane.killHero(Hero, Enemies)
+    return t1
 
 def eventProc():
     eventList = pygame.event.get()
@@ -70,6 +78,7 @@ if __name__ == '__main__':
 
         eventProc()
         Hero.fire()
+        Plane.killEnemy(Hero, Enemies)
         # Hero.move([-1,-1])
         Enemies.Enemy_generate(mainScene)
         Enemies.Enemy_exec()
@@ -81,5 +90,8 @@ if __name__ == '__main__':
         pygame.display.update()
         # update screen
         mainScene.windowUpdate()
+        if gameEnd():
+            gameQuit()
+            exit()
 
         # listen to the end event

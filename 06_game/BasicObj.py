@@ -7,6 +7,7 @@
 # @Email    : wayne-ziqi@gmail.com
 import pygame
 
+
 class Plane(object):
 
     def __init__(self, type, speed, pos, blood, window, imgPath):
@@ -38,8 +39,14 @@ class Plane(object):
     def type(self):
         return self._type
 
+    def blood(self):
+        return self._blood
+
+    def bloodOp(self, value):
+        self._blood += value
+
     def move(self, direction, speed, passable):  # passable: is able to fly out of screen or not
-        if (self._pos[0] + direction[0] * speed >= 0 + self.height() / 2
+        if (self._pos[0] + direction[0] * speed >= 0
                 and self._pos[0] + direction[0] * speed - self.height() / 2 <= self._window.width()):
             self._pos[0] += direction[0] * speed
         if (passable or self._pos[1] + direction[1] * speed >= 0 + self.width() / 2
@@ -49,19 +56,27 @@ class Plane(object):
     def erasable(self):
         if self._pos[1] - self.height() / 2 > self._window.height():
             return True
-        elif self._blood == 0:
+        elif self._blood <= 0:
             return True
         else:
             return False
+
 
 # logically, bullets are also a type of plane
 class Bullet(Plane):
 
     def __init__(self, Owner, window, type, speed, blood, imgPath):
         self._owner = Owner
-        #print(Owner.head())
+        # print(Owner.head())
         super(Bullet, self).__init__(type, speed, Owner.head(), blood, window, imgPath)
 
     def fly(self, direction):
         self.move(direction, self._speed, True)
 
+
+def collide(plane1, plane2):
+    r1 = (plane1.height() + plane2.width()) / 8
+    r2 = (plane2.height() + plane2.width()) / 8
+    powDistance = pow(plane1.position()[0] - plane2.position()[0], 2.0) + \
+                  pow(plane1.position()[1] - plane2.position()[1], 2.0)
+    return powDistance < pow(r1 + r2, 2.0)

@@ -44,6 +44,9 @@ class BulletList(object):
     def __len__(self):
         return len(self._list)
 
+    def __iter__(self):
+        return self._list.__iter__()
+
     def add_bullet(self):
 
         if self._owner.type() == 'Hero':

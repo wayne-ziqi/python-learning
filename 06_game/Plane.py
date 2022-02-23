@@ -8,6 +8,7 @@
 
 """all planes defined here"""
 import random
+import BasicObj
 from BasicObj import Plane
 from Bullet import BulletList
 import pygame
@@ -76,7 +77,7 @@ class PlaneEnemy2(Plane):
 
 class PlaneEnemy3(Plane):
     def __init__(self, speed, pos, window):
-        super(PlaneEnemy3, self).__init__('Enemy3', speed, pos, 20, window, 'images/enemy3_n1.png')
+        super(PlaneEnemy3, self).__init__('Enemy3', speed, pos, 30, window, 'images/enemy3_n1.png')
         self._head = [self.position()[0], self.position()[1] + self.height() / 2]
         self._bullets = BulletList(self, window)
         self._shooter = True
@@ -108,6 +109,10 @@ class EnemyList(object):
 
     def __len__(self):
         return len(self._list)
+
+    def __iter__(self):
+        return self._list.__iter__()
+
 
     def add_enemy(self, type_enemy, speed, position, window):
         if type_enemy == 1:
@@ -150,3 +155,21 @@ class EnemyList(object):
     def Enemy_exec(self):
         for enemy in self._list:
             enemy.exec()
+
+def killHero(Hero, Enemies):
+    for enemy in Enemies:
+        if BasicObj.collide(enemy, Hero):
+            return True
+        elif enemy.is_shooter():
+            for bullet in enemy._bullets:
+                if BasicObj.collide(bullet, Hero):
+                    bullet.bloodOp(-1)
+                    return True
+    return False
+
+def killEnemy(Hero, Enemies):
+    for bullet in Hero._bullets:
+        for enemy in Enemies:
+            if(BasicObj.collide(bullet, enemy)):
+                enemy.bloodOp(-1)
+                bullet.bloodOp(-1)
