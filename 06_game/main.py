@@ -12,7 +12,7 @@ import pygame
 import time
 from MainWindow import MainWindow
 import Plane
-import random
+import Bullet
 
 global mainScene
 global mainClock
@@ -32,6 +32,9 @@ def gameInit():
     global Enemies
     Enemies = Plane.EnemyList()
 
+    global HeroBullets
+    HeroBullets = Bullet.BulletList(Hero, mainScene)
+
     pygame.display.update()
     global mainClock
     mainClock = pygame.time.Clock()
@@ -45,7 +48,6 @@ def eventProc():
             exit()
         elif event.type == pygame.MOUSEMOTION:
             Hero.fly(event.pos)
-
 
 def gameQuit():
     pygame.quit()
@@ -67,12 +69,15 @@ if __name__ == '__main__':
         # check user's interaction
 
         eventProc()
+        Hero.fire()
         # Hero.move([-1,-1])
         Enemies.Enemy_generate(mainScene)
         Enemies.Enemy_exec()
+
         # update images
-        Hero.update()
+        Hero.Hero_update()
         Enemies.update()
+
         pygame.display.update()
         # update screen
         mainScene.windowUpdate()
