@@ -27,7 +27,7 @@ def gameInit():
     mainScene.windowUpdate()
     # set the plane's moving window and position
     global Hero
-    Hero = Plane.PlaneHero(5, [mainScene.width() / 2, mainScene.height() - 100], mainScene)
+    Hero = Plane.PlaneHero(1, [mainScene.width() / 2, mainScene.height() - 100], mainScene)
 
     global Enemies
     Enemies = Plane.EnemyList()
