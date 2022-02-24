@@ -10,19 +10,31 @@ import pygame
 
 class Plane(object):
 
-    def __init__(self, type, speed, pos, blood, window, imgPath):
+    def __init__(self, type, speed, pos, blood, window, imgPath, imageE1=None, imageE2=None, imageE3=None,
+                 imageE4=None, imageE5=None, imageE6=None):
         self._type = type
         self._speed = speed
         self._pos = pos
         self._blood = blood
         self._window = window
-        self._imgPath = imgPath
-        self._imgPlane = pygame.image.load(self._imgPath)
+        self._imgEList = [pygame.image.load(imageE1) if imageE1 else None,
+                          pygame.image.load(imageE2) if imageE2 else None,
+                          pygame.image.load(imageE3) if imageE3 else None,
+                          pygame.image.load(imageE4) if imageE4 else None,
+                          pygame.image.load(imageE5) if imageE5 else None,
+                          pygame.image.load(imageE6) if imageE6 else None,
+                          None]
+
+        self._imgPlane = pygame.image.load(imgPath)
+        self._curImg = self._imgPlane
+        self._boomTick = 0
+        self._boomDelay = 8
+        self._boomStage = -1
         self.update()
 
     def update(self):
-        self._window.window().blit(self._imgPlane, [self._pos[0] - self._imgPlane.get_width() / 2,
-                                                    self._pos[1] - self._imgPlane.get_height() / 2])
+        self._window.window().blit(self._curImg, [self._pos[0] - self._imgPlane.get_width() / 2,
+                                                  self._pos[1] - self._imgPlane.get_height() / 2])
 
     def speed(self):
         return self._speed
@@ -44,6 +56,26 @@ class Plane(object):
 
     def bloodOp(self, value):
         self._blood += value
+
+    def boomReady(self):
+        self._boomTick += 1
+        if (self._boomTick >= self._boomDelay):
+            self._boomStage += 1
+            self._boomTick = 0
+            return True
+        else:
+            return False
+
+    def boom(self):
+        if (self.boomReady()):
+            if self._imgEList[self._boomStage]:
+                self._curImg = self._imgEList[self._boomStage]
+                return 1
+            else:
+                return 0
+
+        else:
+            return -1
 
     def move(self, direction, speed, passable):  # passable: is able to fly out of screen or not
         if (self._pos[0] + direction[0] * speed >= 0

@@ -16,7 +16,12 @@ import pygame
 
 class PlaneHero(Plane):
     def __init__(self, speed, pos, window):
-        super(PlaneHero, self).__init__('Hero', speed, pos, 1, window, 'images/me1.png')
+        super(PlaneHero, self).__init__('Hero', speed, pos, 1, window,
+                                        'images/me1.png',
+                                        'images/me_destroy_1.png',
+                                        'images/me_destroy_2.png',
+                                        'images/me_destroy_3.png',
+                                        'images/me_destroy_4.png',)
         self._head = [self.position()[0], self.position()[1] - self.height() / 2]
         self._bullets = BulletList(self, window)
 
@@ -41,10 +46,18 @@ class PlaneHero(Plane):
         super(PlaneHero, self).update()
         self._bullets.update()
 
+    def dead(self):
+        return self.boom() == 0
+
 
 class PlaneEnemy1(Plane):
     def __init__(self, speed, pos, window):
-        super(PlaneEnemy1, self).__init__('Enemy1', speed, pos, 5, window, 'images/enemy1.png')
+        super(PlaneEnemy1, self).__init__('Enemy1', speed, pos, 5, window,
+                                          'images/enemy1.png',
+                                          'images/enemy1_down1.png',
+                                          'images/enemy1_down2.png',
+                                          'images/enemy1_down3.png',
+                                          'images/enemy1_down4.png',)
         self._head = [self.position()[0], self.position()[1] + self.height() / 2]
         self._shooter = False
 
@@ -60,7 +73,13 @@ class PlaneEnemy1(Plane):
 
 class PlaneEnemy2(Plane):
     def __init__(self, speed, pos, window):
-        super(PlaneEnemy2, self).__init__('Enemy2', speed, pos, 10, window, 'images/enemy2.png')
+        super(PlaneEnemy2, self).__init__('Enemy2', speed, pos, 10, window,
+                                          'images/enemy2.png',
+                                          'images/enemy2_down1.png',
+                                          'images/enemy2_down2.png',
+                                          'images/enemy2_down3.png',
+                                          'images/enemy2_down4.png',
+                                          )
         self._head = [self.position()[0], self.position()[1] + self.height() / 2]
         self._shooter = False
 
@@ -77,7 +96,15 @@ class PlaneEnemy2(Plane):
 
 class PlaneEnemy3(Plane):
     def __init__(self, speed, pos, window):
-        super(PlaneEnemy3, self).__init__('Enemy3', speed, pos, 30, window, 'images/enemy3_n1.png')
+        super(PlaneEnemy3, self).__init__('Enemy3', speed, pos, 30, window,
+                                          'images/enemy3_n1.png',
+                                          'images/enemy3_down1.png',
+                                          'images/enemy3_down2.png',
+                                          'images/enemy3_down3.png',
+                                          'images/enemy3_down4.png',
+                                          'images/enemy3_down5.png',
+                                          'images/enemy3_down6.png',
+                                          )
         self._head = [self.position()[0], self.position()[1] + self.height() / 2]
         self._bullets = BulletList(self, window)
         self._shooter = True
@@ -128,7 +155,9 @@ class EnemyList(object):
     def update(self):
         for i in range(len(self._list) - 1, -1, -1):
             if self._list[i] and self._list[i].erasable():
-                del self._list[i]
+                if self._list[i].boom() == 0:
+                    del self._list[i]
+                else: pass
         for i in range(len(self._list)):
             self._list[i].update()
             if self._list[i].is_shooter():
@@ -159,13 +188,20 @@ class EnemyList(object):
 def killHero(Hero, Enemies):
     for enemy in Enemies:
         if BasicObj.collide(enemy, Hero):
-            return True
+            enemy.bloodOp(-1)
+            Hero.bloodOp(-1)
+
         elif enemy.is_shooter():
             for bullet in enemy._bullets:
                 if BasicObj.collide(bullet, Hero):
                     bullet.bloodOp(-1)
-                    return True
-    return False
+                    Hero.bloodOp(-1)
+
+    if Hero.erasable():
+        if Hero.boom() == 0:
+            return True
+        else: return False
+    else: return False
 
 def killEnemy(Hero, Enemies):
     for bullet in Hero._bullets:
