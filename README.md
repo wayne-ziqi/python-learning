@@ -1,6 +1,6 @@
 # python-learning
 
-Includes python leaning materials and code
+Includes python learning materials and raw code
 
 * 01~03: object orientation programming
 * 04: error and I/O including several image process method
